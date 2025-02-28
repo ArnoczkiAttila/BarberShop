@@ -38,8 +38,11 @@ class AppointmentController extends Controller
         return response()->json(['success'=>true,'message'=>'Sikeres léterhozás!'],200,options:JSON_UNESCAPED_UNICODE);
     }
     public function destroy(Request $request) {
-        
-        Appointment::find($request->id)->delete();
-        return response()->json(['success'=>true,'message'=>'Sikeres törlés!'],200,options:JSON_UNESCAPED_UNICODE);
+        try {
+            Appointment::find($request->id)->delete();
+            return response()->json(['success'=>true,'message'=>'Sikeres törlés!'],200,options:JSON_UNESCAPED_UNICODE);
+        } catch (\Throwable $th) {
+            return response()->json(['success'=>false,'message'=>'Nincs ilyen időpont!'],200,options:JSON_UNESCAPED_UNICODE);
+        }
     }
 }

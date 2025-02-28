@@ -31,8 +31,11 @@ class BarberController extends Controller
         return response()->json(['success'=>true,'message'=>'Sikeres léterhozás!'],200,options:JSON_UNESCAPED_UNICODE);
     }
     public function destroy(Request $request) {
-        
-        Barber::find($request->id)->delete();
-        return response()->json(['success'=>true,'message'=>'Sikeres törlés!'],200,options:JSON_UNESCAPED_UNICODE);
+        try {
+            Barber::findOrFail($request->id)->delete();
+            return response()->json(['success'=>true,'message'=>'Sikeres törlés!'],200,options:JSON_UNESCAPED_UNICODE);
+        } catch (\Throwable $th) {
+            return response()->json(['success'=>false,'message'=>'Nincs ilyen fodrász!'],200,options:JSON_UNESCAPED_UNICODE);
+        }
     }
 }
